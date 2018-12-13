@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ga.dao.GaSuspectInfoDao">
+    
+	<sql id="gaSuspectInfoColumns">
+		a.id AS "id",
+		a.callingnumber AS "callingnumber",
+		a.name AS "name",
+		a.gender AS "gender",
+		a.idcard AS "idcard",
+		a.address AS "address",
+		a.belonggang AS "belonggang",
+		a.gangid AS "gangid",
+		a.age AS "age",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.isswindle AS "isswindle",
+		a.isfake AS "isfake",
+		a.faketarget AS "faketarget",
+		a.detail AS "detail",
+		a.amount AS "amount",
+		a.swindlecount AS "swindlecount",
+		a.starttime AS "starttime",
+		a.uploadflag AS "uploadflag"
+	</sql>
+	
+	<sql id="gaSuspectInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="GaSuspectInfo">
+		SELECT 
+			<include refid="gaSuspectInfoColumns"/>
+		FROM ga_suspectinfo a
+		<include refid="gaSuspectInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GaSuspectInfo">
+		SELECT 
+			<include refid="gaSuspectInfoColumns"/>
+		FROM ga_suspectinfo a
+		<include refid="gaSuspectInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="callingnumber != null and callingnumber != ''">
+				AND a.callingnumber = #{callingnumber}
+			</if>
+			<if test="gender != null and gender != ''">
+				AND a.gender = #{gender}
+			</if>
+			<if test="belonggang != null and belonggang != ''">
+				AND a.belonggang = #{belonggang}
+			</if>
+			<if test="isswindle != null and isswindle != ''">
+				AND a.isswindle = #{isswindle}
+			</if>
+			<if test="isfake != null and isfake != ''">
+				AND a.isfake = #{isfake}
+			</if>
+			<if test="faketarget != null and faketarget != ''">
+				AND a.faketarget = #{faketarget}
+			</if>
+			<if test="uploadflag != null and uploadflag != ''">
+				AND a.uploadflag = #{uploadflag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GaSuspectInfo">
+		SELECT 
+			<include refid="gaSuspectInfoColumns"/>
+		FROM ga_suspectinfo a
+		<include refid="gaSuspectInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ga_suspectinfo(
+			callingnumber,
+			name,
+			gender,
+			idcard,
+			address,
+			belonggang,
+			gangid,
+			age,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			isswindle,
+			isfake,
+			faketarget,
+			detail,
+			amount,
+			swindlecount,
+			starttime,
+			uploadflag
+		) VALUES (
+			#{callingnumber},
+			#{name},
+			#{gender},
+			#{idcard},
+			#{address},
+			#{belonggang},
+			#{gangid},
+			#{age},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{isswindle},
+			#{isfake},
+			#{faketarget},
+			#{detail},
+			#{amount},
+			#{swindlecount},
+			#{starttime},
+			#{uploadflag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ga_suspectinfo SET 	
+			name = #{name},
+			gender = #{gender},
+			idcard = #{idcard},
+			address = #{address},
+			belonggang = #{belonggang},
+			gangid = #{gangid},
+			age = #{age},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			isswindle = #{isswindle},
+			isfake = #{isfake},
+			faketarget = #{faketarget},
+			detail = #{detail},
+			amount = #{amount},
+			swindlecount = #{swindlecount},
+			starttime = #{starttime},
+			uploadflag = #{uploadflag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ga_suspectinfo SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
